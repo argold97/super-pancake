@@ -3,10 +3,23 @@
 
 using namespace std;
 
+void vec_add(vector<float>& vec1, const vector<float>& vec2)
+{
+	for(size_t i = 0; i < vec1.size(); i++)
+		vec1[i] = vec1[i] + vec2[i];
+}
+
 void vec_sub(vector<float>& vec1, const vector<float>& vec2)
 {
 	for(size_t i = 0; i < vec1.size(); i++)
 		vec1[i] = vec1[i] - vec2[i];
+}
+
+void matrix_add(Matrix& a, const Matrix& b)
+{
+	for(size_t i = 0; i < a.rows(); i++)
+		for(size_t j = 0; j < a.cols(); j++)
+			*a.at(i, j) += b.get(i, j);
 }
 
 inline float sigmoid(float x)
@@ -46,4 +59,15 @@ string matrix_to_string(const Matrix& mat)
 		str += "]\n";
 	}
 	return str;
+}
+
+mt19937& gen()
+{
+	static thread_local mt19937 generator(random_device{}());
+	return generator;
+}
+
+float binormal(float in)
+{
+	return (gen()() % 2) ? in : -1.0F * in;
 }
