@@ -82,12 +82,42 @@ float NeuralNet::quad_diff(const NeuralLayer& a, const NeuralLayer& b)
 
 float NeuralNet::train(void** inputs, const NeuralLayer* outputs, unsigned int count, unsigned int iterations, float radius, unsigned int thread_count)
 {
-	float cost;
-	Layer* tmp;
-	run_iteration(cost, tmp, inputs, outputs, count, radius, true);
+	float best_cost;
+	Layer* best_topology = nullptr;
+	run_iteration(best_cost, best_topology, inputs, outputs, count, radius, true);
 	
-	//thread* threads = new thread[thread_count];
+	float* costs = new float[thread_count];
+	Layer** topologies = new Layer*[thread_count];
+	thread* threads = new thread[thread_count];
 	
+	while(iterations > 0)
+	{
+		unsigned int active = thread_count < iterations ? thread_count : iterations;
+		iterations -= active;
+		for(unsigned int i = 0; i < active; i++)
+			threads[i] = thread(&NeuralNet::run_iteration, this, ref(costs[i]), ref(topologies[i]), inputs, outputs, count, radius, false);
+	
+		for(unsigned int i = 0; i < active; i++)
+		{
+			threads[i].join();
+			if(costs[i] < best_cost)
+			{
+				best_cost = costs[i];
+				best_topology = topologies[i];
+			}else {
+				delete[] topologies[i];
+			}
+		}
+	}
+	
+	if(best_topology != nullptr)
+		update_topology(best_topology);
+		
+	delete[] costs;
+	delete[] topologies;
+	delete[] threads;
+	
+	return best_cost;
 }
 
 void NeuralNet::run_iteration(float& cost, Layer*& topology, void** inputs, const NeuralLayer* outputs, unsigned int count, float radius, bool base)
