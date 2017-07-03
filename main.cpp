@@ -1,4 +1,5 @@
 #include "NeuralNet.hpp"
+#include "utils.hpp"
 #include <iostream>
 #include <vector>
 
@@ -15,7 +16,7 @@ int main(int argc, char** argv)
 	
 	NeuralNet network(topology, map);
 
-	float sample[10] = {-0.4F, -0.3F, -0.2F, -0.1F, 0.0F, 0.1F, 0.2F, 0.3F, 0.4F};
+	float sample[9] = {-0.4F, -0.3F, -0.2F, -0.1F, 0.0F, 0.1F, 0.2F, 0.3F, 0.4F};
 
 	NeuralTrace trace = network.evaluate((void*)&sample[0]);
 

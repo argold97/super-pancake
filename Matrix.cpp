@@ -18,6 +18,8 @@ Matrix& Matrix::operator=(const Matrix& other)
 {
 	if(other.rows() * other.cols() != m_rows * m_cols)
 	{
+		m_rows = other.rows();
+		m_cols = other.cols();
 		delete m_data;
 		m_data = new float[m_rows * m_cols];
 	}
@@ -27,7 +29,7 @@ Matrix& Matrix::operator=(const Matrix& other)
 
 Matrix::~Matrix()
 {
-	delete m_data;
+	delete[] m_data;
 }
 
 float* Matrix::at(unsigned int r, unsigned int c)
@@ -47,7 +49,7 @@ const float* Matrix::data() const
 
 void Matrix::load(const float* data)
 {
-	memcpy((void*)m_data, (const void*)data, m_rows * m_cols);
+	memcpy((void*)m_data, (const void*)data, sizeof(float) * m_rows * m_cols);
 }
 
 unsigned int Matrix::rows() const

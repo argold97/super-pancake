@@ -33,3 +33,17 @@ vector<float> matrix_vec_mult(const Matrix& mat, const vector<float>& vec)
 	}
 	return result;
 }
+
+
+string matrix_to_string(const Matrix& mat)
+{
+	string str;
+	for(size_t i = 0; i < mat.rows(); i++)
+	{
+		str += "[ ";
+		for(size_t j = 0; j < mat.rows(); j++)
+			str += to_string(mat.get(i, j)) + " ";
+		str += "]\n";
+	}
+	return str;
+}

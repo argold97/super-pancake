@@ -10,7 +10,7 @@
 class NeuralNet
 {
 	public:
-	NeuralNet(const std::vector<unsigned int>& net, float (*map)(void*, unsigned int));
+	NeuralNet(const std::vector<unsigned int>& topology, float (*map)(void*, unsigned int));
 	~NeuralNet();
 	NeuralTrace evaluate(void* data);
 
